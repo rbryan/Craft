@@ -2027,11 +2027,8 @@ void parse_command(const char *buffer, int forward) {
     char filename[MAX_PATH_LENGTH];
     int radius, count, xc, yc, zc;
 
-    char scheme_buffer[128] = {0};
-
-    if (sscanf(buffer, "/scheme %128s", scheme_buffer) == 1){
-	add_message("herrooooooo!");
-	sexp_eval_string(chibi_context,scheme_buffer, -1, NULL);
+    if (buffer[0] == '/' && buffer[1] == '(') {
+	sexp_eval_string(chibi_context,buffer+1, -1, NULL);
     }
 
     else if (sscanf(buffer, "/identity %128s %128s", username, token) == 2) {
