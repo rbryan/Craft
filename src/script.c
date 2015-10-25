@@ -1,5 +1,6 @@
 #include "script.h"
 #include "chibi-stub.h"
+#include "main.h"
 
 sexp chibi_context;
 
