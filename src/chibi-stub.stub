@@ -2,6 +2,6 @@
 
 (define-c void set-block (int int int int))
 
-(define-c int get-block (int int int int))
+(define-c int get-block (int int int))
 
 (define-c boolean is-destructable (int))
