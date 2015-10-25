@@ -40,7 +40,7 @@ endif()
 
 if(UNIX)
     target_link_libraries(craft dl glfw
-        ${GLFW_LIBRARIES} ${CURL_LIBRARIES})
+        ${GLFW_LIBRARIES} ${CURL_LIBRARIES} chibi-scheme)
 endif()
 
 if(MINGW)

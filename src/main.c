@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include "script.h"
 #include "auth.h"
 #include "client.h"
 #include "config.h"
@@ -2725,6 +2726,10 @@ int main(int argc, char **argv) {
         cnd_init(&worker->cnd);
         thrd_create(&worker->thrd, worker_run, worker);
     }
+
+    //START CHIBI-SCHEME CONTEXT//
+
+    init_chibi_context();
 
     // OUTER LOOP //
     int running = 1;
