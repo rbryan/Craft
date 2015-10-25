@@ -3,9 +3,9 @@
 
 #include <chibi/eval.h>
 
-sexp chibi_context;
+extern sexp chibi_context;
 
-void init_chibi_context();
+extern void init_chibi_context();
 
 
 #endif
