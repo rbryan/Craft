@@ -2026,7 +2026,15 @@ void parse_command(const char *buffer, int forward) {
     int server_port = DEFAULT_PORT;
     char filename[MAX_PATH_LENGTH];
     int radius, count, xc, yc, zc;
-    if (sscanf(buffer, "/identity %128s %128s", username, token) == 2) {
+
+    char scheme_buffer[128] = {0};
+
+    if (sscanf(buffer, "/scheme %128s", scheme_buffer) == 1){
+	add_message("herrooooooo!");
+	sexp_eval_string(chibi_context,scheme_buffer, -1, NULL);
+    }
+
+    else if (sscanf(buffer, "/identity %128s %128s", username, token) == 2) {
         db_auth_set(username, token);
         add_message("Successfully imported identity token!");
         login();
@@ -2127,6 +2135,7 @@ void parse_command(const char *buffer, int forward) {
     else if (forward) {
         client_talk(buffer);
     }
+   
 }
 
 void on_light() {
@@ -2961,6 +2970,10 @@ int main(int argc, char **argv) {
         delete_all_chunks();
         delete_all_players();
     }
+
+    // DESTROY SCHEME CONTEXT //
+
+    sexp_destroy_context(chibi_context);
 
     glfwTerminate();
     curl_global_cleanup();
