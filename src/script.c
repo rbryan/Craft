@@ -16,7 +16,7 @@ void init_chibi_context(){
 	sexp_gc_var1(config_path);
 	sexp_gc_preserve1(chibi_context, config_path);
 
-	config_path = sexp_c_string(chibi_context, "/home/russell/.craftconf.scm", -1);
+	config_path = sexp_c_string(chibi_context, "craftconf.scm", -1);
 
 	sexp_load(chibi_context, config_path, NULL);
 
