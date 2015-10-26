@@ -6,3 +6,5 @@
 
 (define-c boolean is-destructable (int))
 
+(define-c int get-blockreg-val (int int))
+

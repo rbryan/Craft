@@ -1,3 +1,4 @@
+#define _GNU_SOURCE
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <curl/curl.h>
@@ -6,6 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/select.h>
 #include "script.h"
 #include "auth.h"
 #include "client.h"
@@ -2731,6 +2733,26 @@ int main(int argc, char **argv) {
                 render_item(&block_attrib);
             }
 
+	    // ADD OUTPUT FROM CHIBI TO MESSAGES //
+
+	    char chibi_output_buffer[81];
+	    int read_len=0;
+	    fd_set chibi_fd_set;
+	    struct timeval timeout;
+	    timeout.tv_sec = 0;
+	    timeout.tv_usec = 1000;
+
+	    fflush(chibi_output_fp[1]); //flush the pipe;
+
+	    FD_SET(chibi_output_fd[0],&chibi_fd_set);
+	    while(select(chibi_output_fd[0]+1, &chibi_fd_set, NULL, NULL, &timeout) > 0){
+			read_len = read(chibi_output_fd[0], chibi_output_buffer, 80);
+			chibi_output_buffer[read_len] = '\0';
+			add_message(chibi_output_buffer);
+			FD_SET(chibi_output_fd[0],&chibi_fd_set);
+			read_len = 0;
+	    }
+
             // RENDER TEXT //
             char text_buffer[1024];
             float ts = 12 * g->scale;
@@ -2839,7 +2861,7 @@ int main(int argc, char **argv) {
 
     // DESTROY SCHEME CONTEXT //
 
-    sexp_destroy_context(chibi_context);
+    destroy_chibi_context();
 
     glfwTerminate();
     curl_global_cleanup();
