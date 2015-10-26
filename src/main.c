@@ -1899,7 +1899,11 @@ void parse_command(const char *buffer, int forward) {
     int radius, count, xc, yc, zc;
 
     if (buffer[0] == '/' && buffer[1] == '(') {
-	sexp_eval_string(chibi_context,buffer+1, -1, NULL);
+	char *command_buffer;
+	command_buffer = malloc(strlen(buffer)+80);
+	sprintf(command_buffer,"(repl-evaluator (quote %s))",buffer+1);
+	sexp_eval_string(chibi_context, command_buffer, -1, NULL);
+	free(command_buffer);
     }
 
     else if (sscanf(buffer, "/identity %128s %128s", username, token) == 2) {

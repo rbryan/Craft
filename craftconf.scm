@@ -14,9 +14,6 @@
   #t)
 		  
 
-(define (repl)
-  (let loop ((input (read)))
-    (protect (exn (else (print-exception exn))) (eval input))
-    (loop (read))))
+(define (repl-evaluator input)
+    (protect (exn (else (print-exception exn))) (eval input)))
 
-(repl)
