@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <sys/select.h>
+#include <poll.h>
 #include "script.h"
 #include "auth.h"
 #include "client.h"
@@ -2741,19 +2741,17 @@ int main(int argc, char **argv) {
 
 	    char chibi_output_buffer[81];
 	    int read_len=0;
-	    fd_set chibi_fd_set;
-	    struct timeval timeout;
-	    timeout.tv_sec = 0;
-	    timeout.tv_usec = 1000;
+	    struct pollfd chibi_poll_fd;
+
+	    chibi_poll_fd.fd = chibi_output_fd[0];
+	    chibi_poll_fd.events = POLLIN;
 
 	    fflush(chibi_output_fp[1]); //flush the pipe;
 
-	    FD_SET(chibi_output_fd[0],&chibi_fd_set);
-	    while(select(chibi_output_fd[0]+1, &chibi_fd_set, NULL, NULL, &timeout) > 0){
+	    while( poll(&chibi_poll_fd, 1, 0) > 0){
 			read_len = read(chibi_output_fd[0], chibi_output_buffer, 80);
 			chibi_output_buffer[read_len] = '\0';
 			add_message(chibi_output_buffer);
-			FD_SET(chibi_output_fd[0],&chibi_fd_set);
 			read_len = 0;
 	    }
 
